@@ -11,13 +11,6 @@
 #     State: Massachusetts
 #     Station ID: 403
 #     Direction: 3 (East) and 7 (West)
-# 
-# Possible extensions:
-#     Other stations/directions. But missing data
-# 
-# Challenges: missing data in between, missing weather information
-# Weather information: Temperature, rainfall, snowfall, percentage of cloud cover, main description of weather (categorical)
-# Holiday: US national holiday/regional holiday
 # =============================================================================
 
 import pandas as pd
@@ -69,9 +62,9 @@ print(fullcount(df_ts))
 df_east = df_ts[(df_ts['station_id'] == 403) & (df_ts['travel_dir'] == 3)].drop(columns=['travel_dir', 'station_id'])
 df_west = df_ts[(df_ts['station_id'] == 403) & (df_ts['travel_dir'] == 7)].drop(columns=['travel_dir', 'station_id'])
 
-with open('data/df_5118east.pickle', 'wb') as f:
+with open('data/df_403east.pickle', 'wb') as f:
     pickle.dump(df_east, f)
     
-with open('data/df_5118west.pickle', 'wb') as f:
+with open('data/df_403west.pickle', 'wb') as f:
     pickle.dump(df_west, f)
 
