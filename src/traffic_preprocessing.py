@@ -1,18 +1,3 @@
-# =============================================================================
-# We want to forecast traffic flow in order to facilitate traffic management. 
-# For instance, intelligent transport systems can use traffic flow predictions 
-# to mitigate congestion at a given junction/road 
-# 
-# Link: https://www.fhwa.dot.gov/policyinformation/tables/tmasdata/#y21
-# Our dataset is obtained from the Department of Transportation.
-# The dataset records daily traffic volume, binned by hour for year 2021
-# Traffic volume data is collected using a mix of temporary and continuous traffic counting programs
-# For this project, we restrict our analysis to:
-#     State: Massachusetts
-#     Station ID: 403
-#     Direction: 3 (East) and 7 (West)
-# =============================================================================
-
 import pandas as pd
 import numpy as np
 import pickle
