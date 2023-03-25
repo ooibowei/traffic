@@ -33,7 +33,7 @@ df_eastp_test = df_eastp['2021-12':]
 prophet_e = Prophet()
 mod_prophet_e = prophet_e.fit(df_eastp_train)
 pickle.dump(mod_prophet_e, open('src/mod_prophet_e.pkl', 'wb'))
-mod_tbats_e = pickle.load(open('src/mod_prophet_e.pkl', 'rb'))
+mod_prophet_e = pickle.load(open('src/mod_prophet_e.pkl', 'rb'))
 yhat_prophet_e = mod_prophet_e.predict(df_eastp)[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
 yhat_prophet_etest = yhat_prophet_e.loc[yhat_prophet_e['ds'] >= '2021-12', 'yhat']
 
@@ -58,7 +58,7 @@ df_westp_test = df_westp['2021-12':]
 prophet_w = Prophet()
 mod_prophet_w = prophet_w.fit(df_westp_train)
 pickle.dump(mod_prophet_w, open('src/mod_prophet_w.pkl', 'wb'))
-mod_tbats_w = pickle.load(open('src/mod_prophet_w.pkl', 'rb'))
+mod_prophet_w = pickle.load(open('src/mod_prophet_w.pkl', 'rb'))
 yhat_prophet_w = mod_prophet_w.predict(df_westp)[['ds', 'yhat', 'yhat_lower', 'yhat_upper']]
 yhat_prophet_wtest = yhat_prophet_w.loc[yhat_prophet_w['ds'] >= '2021-12', 'yhat']
 
@@ -94,6 +94,20 @@ plt.savefig('images/west_forecast.png', dpi=1200, bbox_inches='tight')
 plt.show()
 
 
-# Final model parameters
+# Final model hyperparameters
 print(mod_tbats_e.summary())
 print(mod_tbats_w.summary())
+
+
+# Retrain with full data
+# East: Seasonal harmonics (11,6), ARMA (4,2)
+# West: 
+fmod_tbats_e = tbats.TBATS(use_box_cox=None, use_trend=True, use_damped_trend=True,
+                           seasonal_periods=[24, 24*7], 
+                           use_arma_errors=True, n_jobs=16)
+fmod_tbats_e = fmod_tbats_e.fit(df_east)
+pickle.dump(fmod_tbats_e, open('src/fmod_tbats_e.pkl', 'wb'))
+fmod_tbats_e = pickle.load(open('src/fmod_tbats_e.pkl', 'rb'))
+
+# Final model
+print(fmod_tbats_e.summary())
