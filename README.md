@@ -13,7 +13,7 @@ For this project, we restrict our analysis to the following
 To be inserted
 
 ## **TBATS Model**
-We considered two models that can capture multiple seasonalities using Fourier series - TBATS and Prophet, and found that <ins>TBATS outperformed Prophet</ins>. Note that SARIMA models are not suitable because they cannot capture multiple seasonalities and we expect to see daily and weekly seasonalities in our data.
+We considered two models that can capture multiple seasonalities using Fourier series - TBATS and Prophet, and found that TBATS outperformed Prophet. Note that SARIMA models are not suitable because they cannot capture multiple seasonalities and we expect to see daily and weekly seasonalities in our data.
 
 We trained TBATS and Prophet on data from Jan - Nov 2021 and compared their RMSE on data from Dec 2021, an out-of-sample test set. TBATS returned a lower RMSE for both East and West, likely due to Prophet's inability to model dependencies in the error term. The final TBATS model was trained on the full data set and the forecasts for Jan 2022 are shown below.
 
