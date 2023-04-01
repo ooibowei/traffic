@@ -1,19 +1,18 @@
 import './App.css';
 import { useState } from "react";
 import Plot from 'react-plotly.js';
+import { GoogleMap, LoadScript, Polyline, Marker } from '@react-google-maps/api';
 
 function App() {
-  /*const [inputval, setInputval] = useState({
-    inputval1: "",
-    year: ""
-  });*/
   const [output, setOutput] = useState({
     x: "",
     y: "",
     targ: "",
     pred: ""
   });
+
   const [dt, setDt] = useState(new Date());
+
   const [sub, setSub] = useState({isSubmitted: false})
 
   const onClick = e => {
@@ -25,14 +24,79 @@ function App() {
         headers: {
           'Content-Type': 'application/json'
         },
-        //body: JSON.stringify({name_input: inputval.inputval1})
         body: JSON.stringify({dt_input: dt})
       }
     )
     .then(resp => resp.json())
     .then(resp => setOutput(resp))
-    //.then(resp => setOutput(resp.output))
   }
+
+/*   const center = {
+    lat: 42.466437,
+    lng: -71.394159
+  };
+
+  const containerStyle = {
+    width: '400px',
+    height: '400px'
+  };
+
+  const onLoad = polyline => {
+    console.log('polyline: ', polyline)
+  };
+  
+  const path = [
+    {lat: 42.466437, lng: -71.394159},
+    {lat: 49.486437, lng: -79.374159}
+  ];
+  
+  const options = {
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2
+  }; */
+
+  const mapContainerStyle = {
+    height: "400px",
+    width: "800px"
+  };
+  
+  const center = {
+    lat: 0,
+    lng: -180
+  };
+  
+  const onLoad = polyline => {
+    console.log('polyline: ', polyline)
+  };
+  
+  const path = [
+    {lat: 37.772, lng: -122.214},
+    {lat: 21.291, lng: -157.821},
+    {lat: -18.142, lng: 178.431},
+    {lat: -27.467, lng: 153.027}
+  ];
+  
+  const options = {
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#FF0000',
+    fillOpacity: 0.35,
+    clickable: false,
+    draggable: false,
+    editable: false,
+    visible: true,
+    radius: 30000,
+    paths: [
+      {lat: 37.772, lng: -122.214},
+      {lat: 21.291, lng: -157.821},
+      {lat: -18.142, lng: 178.431},
+      {lat: -27.467, lng: 153.027}
+    ],
+    zIndex: 1
+  };
+  
 
   return (
     <div
@@ -41,13 +105,41 @@ function App() {
         width: "100%",
         }}
     >
+        <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
+            <GoogleMap
+                id="marker-example"
+                mapContainerStyle={mapContainerStyle}
+                zoom={2}
+                center={center}
+            >
+                <Marker position={center} />
+                <Polyline
+                onLoad={onLoad}
+                path={path}
+                options={options}
+                />
+            </GoogleMap>
+        </LoadScript>
         <div>
             <h1 className="title">Hourly Traffic Volume App</h1>
+{/*             <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
+            <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={17}
+            >
+                <Polyline>
+                    onLoad={onLoad}
+                    path={path}
+                    options={options}
+                </Polyline>
+            </GoogleMap>
+            </LoadScript> */}
         </div>
         <div>
             <h2>Instructions</h2>
             <ul>
-            <li>This app will predict the hourly traffic volume at XXX, for both the east and west directions.</li>
+            <li>This app will forecast the hourly traffic volume at XXX, for both the east and west directions.</li>
             <li>Enter the target date and time in the box below.</li>
             <li>The target date must be from 2022 and beyond. The tick/cross to the right will indicate if it is an accepted input.</li>
             </ul>
