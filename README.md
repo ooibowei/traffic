@@ -5,7 +5,7 @@ The objective of this project is to forecast hourly traffic volume at a given tr
 
 For this project, we restrict our analysis to the following
 * State: Massachusetts
-* Station ID: 403
+* Station: Elm Street, Concord (Station ID: 403)
 * Directions: East & West
 
 ## **Flask App for Hourly Forecasts**
