@@ -9,8 +9,9 @@ For this project, we restrict our analysis to the following
 * Directions: East & West
 
 ## **Flask App for Hourly Forecasts**
-
-To be inserted
+We deployed the model on a webapp using a Flask backend and a React frontend. The app can be accessed at [to be inserted] and screenshots are shown below.
+<img src="images/app1.png" width="840"><br>  
+<img src="images/app2.png" width="840">
 
 ## **TBATS Model**
 We considered two models that can capture multiple seasonalities using Fourier series - TBATS and Prophet, and found that TBATS outperformed Prophet. Note that SARIMA models are not suitable because they cannot capture multiple seasonalities and we expect to see daily and weekly seasonalities in our data.
