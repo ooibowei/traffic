@@ -6,9 +6,11 @@ import { GoogleMap, LoadScript, Polyline, Marker } from '@react-google-maps/api'
 function App() {
   const [output, setOutput] = useState({
     x: "",
-    y: "",
+    y_e: "",
+    y_w: "",
     targ: "",
-    pred: ""
+    pred_e: "",
+    pred_w: ""
   });
 
   const [dt, setDt] = useState(new Date());
@@ -31,53 +33,51 @@ function App() {
     .then(resp => setOutput(resp))
   }
 
-/*   const center = {
-    lat: 42.466437,
-    lng: -71.394159
-  };
-
-  const containerStyle = {
-    width: '400px',
-    height: '400px'
-  };
-
-  const onLoad = polyline => {
-    console.log('polyline: ', polyline)
-  };
-  
-  const path = [
-    {lat: 42.466437, lng: -71.394159},
-    {lat: 49.486437, lng: -79.374159}
-  ];
-  
-  const options = {
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2
-  }; */
-
   const mapContainerStyle = {
     height: "400px",
     width: "800px"
   };
   
   const center = {
-    lat: 0,
-    lng: -180
+    lat: 42.4661436440556, 
+    lng: -71.39302047738968
   };
   
   const onLoad = polyline => {
     console.log('polyline: ', polyline)
   };
   
-  const path = [
-    {lat: 37.772, lng: -122.214},
-    {lat: 21.291, lng: -157.821},
-    {lat: -18.142, lng: 178.431},
-    {lat: -27.467, lng: 153.027}
+  const path_e = [
+    {lat: 42.46668835230436, lng: -71.39541045877085},
+    //{lat: 42.465569824119775, lng: -71.39069250025713}
+    {lat: 42.46558016279177, lng: -71.39068690943682}
   ];
+
+  const path_w = [
+    //{lat: 42.46561140545062, lng: -71.39068686350859},
+    {lat: 42.46561963118116, lng: -71.39067016089516},
+    {lat: 42.46673824901031, lng: -71.39539918526981}
+  ];
+
+  const options_red = {
+    strokeColor: 'Red',
+    strokeOpacity: 0.8,
+    strokeWeight: 4
+  };
+
+  const options_orange = {
+    strokeColor: '#FF5733',
+    strokeOpacity: 0.8,
+    strokeWeight: 4
+  };
+
+  const options_green = {
+    strokeColor: 'Green',
+    strokeOpacity: 0.8,
+    strokeWeight: 4
+  };
   
-  const options = {
+  /* const options = {
     strokeColor: '#FF0000',
     strokeOpacity: 0.8,
     strokeWeight: 2,
@@ -95,9 +95,8 @@ function App() {
       {lat: -27.467, lng: 153.027}
     ],
     zIndex: 1
-  };
+  }; */
   
-
   return (
     <div
         style={{
@@ -105,41 +104,13 @@ function App() {
         width: "100%",
         }}
     >
-        <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
-            <GoogleMap
-                id="marker-example"
-                mapContainerStyle={mapContainerStyle}
-                zoom={2}
-                center={center}
-            >
-                <Marker position={center} />
-                <Polyline
-                onLoad={onLoad}
-                path={path}
-                options={options}
-                />
-            </GoogleMap>
-        </LoadScript>
         <div>
-            <h1 className="title">Hourly Traffic Volume App</h1>
-{/*             <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
-            <GoogleMap
-                mapContainerStyle={containerStyle}
-                center={center}
-                zoom={17}
-            >
-                <Polyline>
-                    onLoad={onLoad}
-                    path={path}
-                    options={options}
-                </Polyline>
-            </GoogleMap>
-            </LoadScript> */}
+            <h1 className="title">Hourly Traffic Volume Forecasts</h1>
         </div>
         <div>
             <h2>Instructions</h2>
             <ul>
-            <li>This app will forecast the hourly traffic volume at XXX, for both the east and west directions.</li>
+            <li>This app will forecast the east-going and west-going hourly traffic volume at Elm Street, Concord, Massachusetts.</li>
             <li>Enter the target date and time in the box below.</li>
             <li>The target date must be from 2022 and beyond. The tick/cross to the right will indicate if it is an accepted input.</li>
             </ul>
@@ -153,30 +124,110 @@ function App() {
         </div>
         {sub.isSubmitted &&
         <div>
-            <h2>Results</h2>
-            The predicted traffic volume on {output.targ} is {Math.round(output.pred)}.
-            <br /><br />
-            <Plot
-                data={[
-                    {
-                    x: output.x,
-                    y: output.y,
-                    type: 'scatter',
-                    name: "Traffic volume"
-                    }
-                    , {
+          <div>
+              <h2>Results</h2>
+              The predicted traffic volume on {output.targ} is 
+              <ul>
+                <li>East: {Math.round(output.pred_e)}</li>
+                <li>West: {Math.round(output.pred_w)}</li>
+              </ul>
+              
+              <br /><br />
+              <Plot
+                  data={[
+                      {
+                        x: output.x,
+                        y: output.y_e,
+                        type: 'scatter',
+                        name: "East"
+                      }, 
+                      {
+                        x: output.x,
+                        y: output.y_w,
+                        type: 'scatter',
+                        marker: {color: 'orange'},
+                        name: "West"
+                      }, 
+                      {
                         x: [output.targ],
-                        y: [output.pred],
-                        marker: {color: 'red', symbol: 'star', size: 10},
-                        name: "Target date"
-                    }
-                ]}
-                layout={ {
-                    width: 1200, 
-                    height: 600, 
-                    title: "Traffic Volume Predictions for Week of " + output.targ + " (East)"
-                } }
-            />
+                        y: [output.pred_e],
+                        marker: {color: 'indigo', symbol: 'circle', size: 10},
+                        name: "East - Target"
+                      },
+                      {
+                        x: [output.targ],
+                        y: [output.pred_w],
+                        marker: {color: 'brown', symbol: 'circle', size: 10},
+                        name: "West - Target"
+                      }
+                  ]}
+                  layout={ {
+                      width: 1200, 
+                      height: 600, 
+                      title: "Traffic Volume Predictions for Week of " + output.targ
+                  } }
+              />
+          </div>
+          <br />
+          <div>
+              <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
+              <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
+                  zoom={17.5}
+                  center={center}
+              >
+                  <Marker position={{lat: 42.466140759994005, lng: -71.3928541589189}}
+                  label={"West: " + Math.round(output.pred_w)}
+                  key="west"
+                  />
+
+                  {/* Change polyline colour depending on traffic volume */}
+
+                  {output.pred_e < 700 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_e}
+                  options={options_green}
+                  />}
+
+                  {output.pred_e >= 700 && output.pred_e < 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_e}
+                  options={options_orange}
+                  />}
+
+                  {output.pred_e >= 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_e}
+                  options={options_red}
+                  />}
+
+                  {output.pred_w < 700 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_w}
+                  options={options_green}
+                  />}
+
+                  {output.pred_w >= 700 && output.pred_w < 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_w}
+                  options={options_orange}
+                  />}
+
+                  {output.pred_w >= 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_w}
+                  options={options_red}
+                  />}
+
+              </GoogleMap>
+          </LoadScript>
+          </div>
         </div>
         }
     </div>
