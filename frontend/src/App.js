@@ -1,7 +1,7 @@
 import './App.css';
 import { useState } from "react";
 import Plot from 'react-plotly.js';
-import { GoogleMap, LoadScript, Polyline, Marker } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Polyline, Marker, InfoWindow } from '@react-google-maps/api';
 
 function App() {
   const [output, setOutput] = useState({
@@ -34,8 +34,8 @@ function App() {
   }
 
   const mapContainerStyle = {
-    height: "400px",
-    width: "800px"
+    height: "600px",
+    width: "900px"
   };
   
   const center = {
@@ -47,14 +47,16 @@ function App() {
     console.log('polyline: ', polyline)
   };
   
+  const [infoE, setInfoE] = useState(false);
+
+  const [infoW, setInfoW] = useState(false);
+
   const path_e = [
     {lat: 42.46668835230436, lng: -71.39541045877085},
-    //{lat: 42.465569824119775, lng: -71.39069250025713}
     {lat: 42.46558016279177, lng: -71.39068690943682}
   ];
 
   const path_w = [
-    //{lat: 42.46561140545062, lng: -71.39068686350859},
     {lat: 42.46561963118116, lng: -71.39067016089516},
     {lat: 42.46673824901031, lng: -71.39539918526981}
   ];
@@ -76,26 +78,6 @@ function App() {
     strokeOpacity: 0.8,
     strokeWeight: 4
   };
-  
-  /* const options = {
-    strokeColor: '#FF0000',
-    strokeOpacity: 0.8,
-    strokeWeight: 2,
-    fillColor: '#FF0000',
-    fillOpacity: 0.35,
-    clickable: false,
-    draggable: false,
-    editable: false,
-    visible: true,
-    radius: 30000,
-    paths: [
-      {lat: 37.772, lng: -122.214},
-      {lat: 21.291, lng: -157.821},
-      {lat: -18.142, lng: 178.431},
-      {lat: -27.467, lng: 153.027}
-    ],
-    zIndex: 1
-  }; */
   
   return (
     <div
@@ -126,13 +108,101 @@ function App() {
         <div>
           <div>
               <h2>Results</h2>
-              The predicted traffic volume on {output.targ} is 
-              <ul>
-                <li>East: {Math.round(output.pred_e)}</li>
-                <li>West: {Math.round(output.pred_w)}</li>
-              </ul>
-              
+              The forecasted traffic volume on {output.targ} can be displayed in the map below by selecting the appropriate traffic lane. 
+              The traffic lanes are coloured green/orange/red depending on the forecasted traffic volume. The forecasts for the week is shown in the plot further below.
               <br /><br />
+              <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
+              <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
+                  zoom={17.5}
+                  center={center}
+              >                
+
+                  {/* Change polyline colour depending on traffic volume */}
+
+                  {output.pred_e < 700 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_e}
+                  options={options_green}
+                  onClick={() => {setInfoE(true)}}
+                  />}
+                  
+                  {output.pred_e >= 700 && output.pred_e < 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_e}
+                  options={options_orange}
+                  onClick={() => {setInfoE(true)}}
+                  />}
+
+                  {output.pred_e >= 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_e}
+                  options={options_red}
+                  onClick={() => {setInfoE(true)}}
+                  />}
+
+                  {output.pred_w < 700 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_w}
+                  options={options_green}
+                  onClick={() => {setInfoW(true)}}
+                  />}
+
+                  {output.pred_w >= 700 && output.pred_w < 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_w}
+                  options={options_orange}
+                  onClick={() => {setInfoW(true)}}
+                  />}
+
+                  {output.pred_w >= 1400 && 
+                  <Polyline
+                  onLoad={onLoad}
+                  path={path_w}
+                  options={options_red}
+                  onClick={() => {setInfoW(true)}}
+                  />}
+
+                  {infoE && (
+                    <InfoWindow
+                        onCloseClick={() => {
+                          setInfoE(false);
+                        }}
+                        position={{lat: 42.465950833062536, lng: -71.39222675607662}}
+                    >
+                      <div style={{ color: 'black' }}>
+                        <u>East</u><br />
+                        Forecasted hourly traffic volume: {Math.round(output.pred_e)}
+                      </div>
+                    </InfoWindow>
+                  )}
+
+                  {infoW && (
+                    <InfoWindow
+                        onCloseClick={() => {
+                          setInfoW(false);
+                        }}
+                        position={{lat: 42.4663852375204, lng: -71.39392857210585}}
+                    >
+                      <div style={{ color: 'black' }}>
+                        <u>West</u><br />
+                        Forecasted hourly traffic volume: {Math.round(output.pred_w)}
+                      </div>
+                    </InfoWindow>
+                  )}
+
+              </GoogleMap>
+              </LoadScript>
+              
+          </div>
+          <br />
+          <div>
+          <br /><br />
               <Plot
                   data={[
                       {
@@ -162,71 +232,11 @@ function App() {
                       }
                   ]}
                   layout={ {
-                      width: 1200, 
+                      width: 900, 
                       height: 600, 
-                      title: "Traffic Volume Predictions for Week of " + output.targ
+                      title: "Traffic Volume Forecasts for Week of " + output.targ
                   } }
               />
-          </div>
-          <br />
-          <div>
-              <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
-              <GoogleMap
-                  mapContainerStyle={mapContainerStyle}
-                  zoom={17.5}
-                  center={center}
-              >
-                  <Marker position={{lat: 42.466140759994005, lng: -71.3928541589189}}
-                  label={"West: " + Math.round(output.pred_w)}
-                  key="west"
-                  />
-
-                  {/* Change polyline colour depending on traffic volume */}
-
-                  {output.pred_e < 700 && 
-                  <Polyline
-                  onLoad={onLoad}
-                  path={path_e}
-                  options={options_green}
-                  />}
-
-                  {output.pred_e >= 700 && output.pred_e < 1400 && 
-                  <Polyline
-                  onLoad={onLoad}
-                  path={path_e}
-                  options={options_orange}
-                  />}
-
-                  {output.pred_e >= 1400 && 
-                  <Polyline
-                  onLoad={onLoad}
-                  path={path_e}
-                  options={options_red}
-                  />}
-
-                  {output.pred_w < 700 && 
-                  <Polyline
-                  onLoad={onLoad}
-                  path={path_w}
-                  options={options_green}
-                  />}
-
-                  {output.pred_w >= 700 && output.pred_w < 1400 && 
-                  <Polyline
-                  onLoad={onLoad}
-                  path={path_w}
-                  options={options_orange}
-                  />}
-
-                  {output.pred_w >= 1400 && 
-                  <Polyline
-                  onLoad={onLoad}
-                  path={path_w}
-                  options={options_red}
-                  />}
-
-              </GoogleMap>
-          </LoadScript>
           </div>
         </div>
         }
@@ -236,8 +246,3 @@ function App() {
 }
 
 export default App;
-
-//<input onChange={(e) => setInputval({inputval1: e.target.value})} />
-//<input onChange={(e) => setInputval({year: e.target.value})} />
-//<p>Your name is: {output} and {inputval.year} and </p>
-//<p>Your name is: {output.output_x}  </p>
