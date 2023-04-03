@@ -1,7 +1,7 @@
 import './App.css';
 import { useState } from "react";
 import Plot from 'react-plotly.js';
-import { GoogleMap, LoadScript, Polyline, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, LoadScript, Polyline, InfoWindow } from '@react-google-maps/api';
 
 function App() {
   const [output, setOutput] = useState({
@@ -20,7 +20,7 @@ function App() {
   const onClick = e => {
     e.preventDefault();
     setSub({isSubmitted: true})
-    fetch("/predict",
+    fetch("https://traffic-0rnt.onrender.com/predict",
     {
         method: 'POST',
         headers: {
