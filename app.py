@@ -1,13 +1,12 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
-import tbats
 import pickle
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
+# from flask_cors import CORS
 
 app = Flask(__name__)
-cors = CORS(app)
+# cors = CORS(app)
 
 @app.post('/predict')
 def predict():
