@@ -1,4 +1,4 @@
-# Hourly Traffic Volume Forecasting App using TBATS & Flask
+# Hourly Traffic Volume Forecasting App using TBATS, Flask and React
 
 ## **Introduction**
 The objective of this project is to forecast hourly traffic volume at a given traffic station. This volume forecast is important to facilitate traffic management decisions. For instance, intelligent transport systems can use traffic flow predictions to mitigate congestion.
@@ -27,4 +27,4 @@ We trained TBATS and Prophet on data from Jan - Nov 2021 and compared their RMSE
 * <ins>Other Stations</ins>. Naturally, we can extend this to other states and stations.  
 
 ## **Data**
-Our dataset was obtained from the Department of Transportation. It records daily traffic volume, The 2021 hourly volume data was collected using a mix of temporary and continuous traffic counting programs. Link: https://www.fhwa.dot.gov/policyinformation/tables/tmasdata/
+Our dataset was obtained from the Department of Transportation. The 2021 hourly volume data was collected using a mix of temporary and continuous traffic counting programs. Link: https://www.fhwa.dot.gov/policyinformation/tables/tmasdata/
