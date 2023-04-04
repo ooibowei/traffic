@@ -9,7 +9,7 @@ For this project, we restrict our analysis to the following
 * Directions: East & West
 
 ## **Flask App for Hourly Forecasts**
-We deployed the model on a webapp using a Flask backend and a React frontend. The app can be accessed at [to be inserted] and screenshots are shown below.
+We deployed the model on a webapp using a Flask backend and a React frontend. The app can be accessed at https://trafficapp.netlify.app/ and screenshots are shown below.
 <img src="images/app1.png" width="840"><br>  
 <img src="images/app2.png" width="840">
 
