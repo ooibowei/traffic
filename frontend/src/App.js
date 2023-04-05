@@ -111,7 +111,7 @@ function App() {
               The forecasted traffic volume on {output.targ} can be displayed in the map below by selecting the appropriate traffic lane. 
               The traffic lanes are coloured green/orange/red depending on the forecasted traffic volume. The forecasts for the week is shown in the plot further below.
               <br /><br />
-              <LoadScript googleMapsApiKey="AIzaSyDFOYWlEgtpryBkhQnVmj9BA_2MDvZnUAU">
+              <LoadScript googleMapsApiKey="Redacted">
               <GoogleMap
                   mapContainerStyle={mapContainerStyle}
                   zoom={17.5}
